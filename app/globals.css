@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 30% 97%;
+    --foreground: 0 0% 8%;
+    --card: 40 20% 99%;
+    --card-foreground: 0 0% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+    --primary: 150 42% 18%;
+    --primary-foreground: 40 30% 97%;
+    --secondary: 40 20% 92%;
+    --secondary-foreground: 150 42% 18%;
+    --muted: 40 20% 92%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 40 40% 88%;
+    --accent-foreground: 150 42% 18%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 150 42% 18%;
+    --radius: 0.125rem;
+    --chart-1: 150 42% 18%;
+    --chart-2: 40 50% 60%;
+    --chart-3: 0 0% 25%;
+    --chart-4: 150 25% 45%;
+    --chart-5: 40 70% 75%;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream-100 text-foreground;
+    font-family: 'Jost', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .font-luxury {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .text-shadow-lg {
+    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .img-hover-zoom {
+    overflow: hidden;
+  }
+  .img-hover-zoom img {
+    transition: transform 0.6s ease;
+  }
+  .img-hover-zoom:hover img {
+    transform: scale(1.08);
+  }
+  .nav-underline::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 1px;
+    background: #1b4332;
+    transition: width 0.3s ease;
+  }
+  .nav-underline:hover::after,
+  .nav-underline.active::after {
+    width: 100%;
+  }
+  .btn-luxury {
+    @apply inline-flex items-center justify-center px-8 py-3 text-xs font-sans tracking-widest uppercase transition-all duration-300;
+  }
+  .btn-primary {
+    @apply btn-luxury bg-forest-700 text-cream-100 hover:bg-forest-600;
+  }
+  .btn-outline {
+    @apply btn-luxury border border-forest-700 text-forest-700 hover:bg-forest-700 hover:text-cream-100;
+  }
+  .section-heading {
+    @apply font-luxury text-4xl md:text-5xl font-light text-forest-800;
+  }
+  .section-subheading {
+    @apply font-sans text-xs tracking-widest uppercase text-forest-600;
+  }
+  
+  /* Instagram Auto-Scroll Animations */
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  @keyframes scroll-right {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  .animate-scroll-left {
+    animation: scroll-left 200s linear infinite;
+    width: fit-content;
+  }
+  
+  .animate-scroll-left:hover {
+    animation-play-state: paused;
+  }
+  
+  .animate-scroll-right {
+    animation: scroll-right 200s linear infinite;
+    width: fit-content;
+  }
+  
+  .animate-scroll-right:hover {
+    animation-play-state: paused;
+  }
+}
+
+
+.custom-thin-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-thin-scroll::-webkit-scrollbar-thumb {
+  background: #d9c7a8;
+  border-radius: 999px;
+}
+
+.custom-thin-scroll::-webkit-scrollbar-thumb:hover {
+  background: #1e5c43;
+}
+
+/* ===== Elmas Luxury Search Scrollbar ===== */
+
+.search-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1E5C43 rgba(30, 92, 67, 0.08);
+}
+
+/* Chrome, Edge, Safari */
+.search-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 92, 67, 0.08);
+  border-radius: 999px;
+}
+
+.search-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 92, 67, 0.85),
+    rgba(30, 92, 67, 1)
+  );
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+.search-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #164635;
+}
+
+.search-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+/* Global sleek scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1E5C43 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 2px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #1E5C43;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #123728;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}

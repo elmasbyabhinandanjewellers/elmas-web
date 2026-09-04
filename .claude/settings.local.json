@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(///wsl.localhost/Ubuntu-24.04/home/jitin/Desktop/elmas/elmas-web/**)"
+    ]
+  }
+}
