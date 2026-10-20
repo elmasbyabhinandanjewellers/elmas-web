@@ -542,6 +542,7 @@ const formatPriceLabel = (value) => {
 export default function ShopFilters({
   filters,
   setFilters,
+  applyFilters,
   clearFilters,
   activeFilterCount,
   categories = [],
@@ -712,12 +713,20 @@ export default function ShopFilters({
           </div>
 
           <div className="flex items-center justify-between font-sans text-xs text-cream-700">
-            <span>{formatPriceLabel(filters.minPrice)}</span>
+            <span>{formatPriceLabel(Number(filters.minPrice || 0))}</span>
             <span className="text-forest-700 font-medium">
-              {formatPriceLabel(filters.maxPrice)}
-              {filters.maxPrice >= MAX_PRICE ? "+" : ""}
+              {formatPriceLabel(Number(filters.maxPrice || 0))}
+              {Number(filters.maxPrice || 0) >= MAX_PRICE ? "+" : ""}
             </span>
           </div>
+
+          <button
+            type="button"
+            onClick={applyFilters}
+            className="btn-primary w-full mt-2"
+          >
+            Apply
+          </button>
         </div>
       </div>
 

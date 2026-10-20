@@ -34,6 +34,15 @@ function ShopPageContent() {
     limit: 100,
   });
 
+  const [appliedFilters, setAppliedFilters] = useState({
+    category: "",
+    collection: "",
+    search: "",
+    minPrice: 0,
+    maxPrice: MAX_PRICE,
+    limit: 100,
+  });
+
   useEffect(() => {
     const category = searchParams.get("category") || "";
     const collection = searchParams.get("collection") || "";
@@ -43,73 +52,88 @@ function ShopPageContent() {
     const maxPriceParam = searchParams.get("maxPrice");
     const limitParam = searchParams.get("limit");
 
-    setFilters((prev) => ({
-      ...prev,
+    const nextFilters = {
       category,
       collection,
       search,
       minPrice: minPriceParam ? Number(minPriceParam) : 0,
       maxPrice: maxPriceParam ? Number(maxPriceParam) : MAX_PRICE,
       limit: limitParam ? Number(limitParam) : 100,
-    }));
+    };
+
+    setFilters(nextFilters);
+    setAppliedFilters(nextFilters);
   }, [searchParams]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const params = {
-        isActive: true,
-        limit: filters.limit || 100,
-        sort,
-      };
+    const params = {
+      isActive: true,
+      limit: appliedFilters.limit || 100,
+      sort,
+    };
 
-      if (filters.category) params.category = filters.category;
-      if (filters.collection) params.collection = filters.collection;
-      if (filters.search) params.search = filters.search;
-      if (filters.minPrice > 0) params.minPrice = filters.minPrice;
-      if (filters.maxPrice < MAX_PRICE) params.maxPrice = filters.maxPrice;
+    if (appliedFilters.category) params.category = appliedFilters.category;
+    if (appliedFilters.collection) params.collection = appliedFilters.collection;
+    if (appliedFilters.search) params.search = appliedFilters.search;
+    if (appliedFilters.minPrice > 0) params.minPrice = appliedFilters.minPrice;
+    if (appliedFilters.maxPrice < MAX_PRICE) params.maxPrice = appliedFilters.maxPrice;
 
-      fetchProducts(params);
-    }, 350);
+    fetchProducts(params);
+  }, [appliedFilters, sort]);
 
-    return () => clearTimeout(timer);
-  }, [filters, sort]);
+  const applyFilters = () => {
+    const normalizedMaxPrice =
+      filters.maxPrice === "" ? MAX_PRICE : Number(filters.maxPrice);
+
+    const updatedFilters = {
+      ...filters,
+      minPrice: Math.max(0, Number(filters.minPrice || 0)),
+      maxPrice: Math.min(MAX_PRICE, normalizedMaxPrice),
+    };
+
+    setFilters(updatedFilters);
+    setAppliedFilters(updatedFilters);
+    setSidebarOpen(false);
+  };
 
   const clearFilters = () => {
-    setFilters({
+    const reset = {
       category: "",
       collection: "",
       search: "",
       minPrice: 0,
       maxPrice: MAX_PRICE,
       limit: 100,
-    });
+    };
 
+    setFilters(reset);
+    setAppliedFilters(reset);
     setSort("newest");
   };
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
 
-    if (filters.category) count += 1;
-    if (filters.collection) count += 1;
-    if (filters.search) count += 1;
-    if (filters.minPrice > 0 || filters.maxPrice < MAX_PRICE) count += 1;
+    if (appliedFilters.category) count += 1;
+    if (appliedFilters.collection) count += 1;
+    if (appliedFilters.search) count += 1;
+    if (appliedFilters.minPrice > 0 || appliedFilters.maxPrice < MAX_PRICE) count += 1;
 
     return count;
-  }, [filters]);
+  }, [appliedFilters]);
 
   return (
     <div className="bg-cream-100 min-h-screen">
       <ShopHeader />
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-10">
-        {filters.search && (
+        {appliedFilters.search && (
           <div className="mb-6 rounded-2xl border border-cream-300 bg-white px-5 py-4">
             <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-forest-500">
               Search Results
             </p>
             <h2 className="mt-1 font-luxury text-2xl text-forest-800">
-              Showing products for “{filters.search}”
+              Showing products for “{appliedFilters.search}”
             </h2>
           </div>
         )}
@@ -127,6 +151,7 @@ function ShopPageContent() {
             <ShopFilters
               filters={filters}
               setFilters={setFilters}
+              applyFilters={applyFilters}
               clearFilters={clearFilters}
               activeFilterCount={activeFilterCount}
               categories={categories}
@@ -170,6 +195,7 @@ function ShopPageContent() {
             <ShopFilters
               filters={filters}
               setFilters={setFilters}
+              applyFilters={applyFilters}
               clearFilters={clearFilters}
               activeFilterCount={activeFilterCount}
               categories={categories}
