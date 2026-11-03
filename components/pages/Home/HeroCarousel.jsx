@@ -142,15 +142,20 @@ export default function HeroCarousel() {
           const { desktop: desktopImage, mobile: mobileImage } =
             getSlideImages(slide, idx);
 
+          const isFirstSlide = idx === 0;
+
           const hasOnlyButton =
-            !slide?.title &&
+            isFirstSlide ||
+            (!slide?.title &&
             !slide?.subtitle &&
             slide?.buttonText &&
-            slide?.link;
+            slide?.link);
+
+          const shouldRenderText =
+            !isFirstSlide && (slide?.title || slide?.subtitle);
 
           const shouldRenderContent =
-            slide?.title ||
-            slide?.subtitle ||
+            shouldRenderText ||
             (slide?.buttonText && slide?.link);
 
           return (
@@ -194,44 +199,54 @@ export default function HeroCarousel() {
               {shouldRenderContent && (
                 <div
                   className={`absolute inset-0 z-[3] flex ${
-                    hasOnlyButton ? "items-end pb-24" : "items-center"
+                    isFirstSlide
+                      ? "items-end pb-36 sm:pb-40 md:pb-44"
+                      : hasOnlyButton
+                      ? "items-end pb-24"
+                      : "items-center"
                   }`}
                 >
                   <div className="px-8 sm:px-14 md:px-20 max-w-xl">
-                    {(slide?.title || slide?.subtitle) && (
-                      <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-white/60 mb-3">
-                        Elmas · Handcrafted Silver
-                      </p>
-                    )}
+                    {shouldRenderText && (
+                      <>
+                        <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-white/60 mb-3">
+                          Elmas · Handcrafted Silver
+                        </p>
 
-                    {slide?.title && (
-                      <h2
-                        className={`font-luxury text-4xl sm:text-5xl md:text-6xl text-white leading-tight mb-4 transition-all duration-700 ${
-                          idx === currentSlide
-                            ? "opacity-100 translate-y-0"
-                            : "opacity-0 translate-y-4"
-                        }`}
-                      >
-                        {slide.title}
-                      </h2>
-                    )}
+                        {slide?.title && (
+                          <h2
+                            className={`font-luxury text-4xl sm:text-5xl md:text-6xl text-white leading-tight mb-4 transition-all duration-700 ${
+                              idx === currentSlide
+                                ? "opacity-100 translate-y-0"
+                                : "opacity-0 translate-y-4"
+                            }`}
+                          >
+                            {slide.title}
+                          </h2>
+                        )}
 
-                    {slide?.subtitle && (
-                      <p
-                        className={`font-sans text-sm sm:text-base text-white/75 leading-relaxed mb-8 max-w-sm transition-all duration-700 delay-100 ${
-                          idx === currentSlide
-                            ? "opacity-100 translate-y-0"
-                            : "opacity-0 translate-y-4"
-                        }`}
-                      >
-                        {slide.subtitle}
-                      </p>
+                        {slide?.subtitle && (
+                          <p
+                            className={`font-sans text-sm sm:text-base text-white/75 leading-relaxed mb-8 max-w-sm transition-all duration-700 delay-100 ${
+                              idx === currentSlide
+                                ? "opacity-100 translate-y-0"
+                                : "opacity-0 translate-y-4"
+                            }`}
+                          >
+                            {slide.subtitle}
+                          </p>
+                        )}
+                      </>
                     )}
 
                     {slide?.buttonText && slide?.link && (
                       <Link
                         href={slide.link}
-                        className={`inline-flex items-center gap-2 px-7 py-3 font-sans text-xs tracking-[0.2em] uppercase border border-white text-white hover:bg-white hover:text-black transition-all duration-300 delay-200 ${
+                        className={`inline-flex items-center gap-2 px-7 py-3 font-sans text-xs tracking-[0.2em] uppercase border transition-all duration-300 delay-200 ${
+                          isFirstSlide
+                            ? "bg-white text-forest-950 font-medium border-white hover:bg-forest-900 hover:text-white hover:border-forest-900 shadow-lg"
+                            : "border-white text-white hover:bg-white hover:text-black"
+                        } ${
                           idx === currentSlide
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-4"
