@@ -47,7 +47,14 @@ export default function HeroCarousel() {
 
   if (!slides.length) return null;
 
-  const getSlideImages = (slide) => {
+  const getSlideImages = (slide, idx) => {
+    if (idx === 0) {
+      return {
+        desktop: "/elmas-front-banner-large.webp",
+        mobile: "/elmas-front-banner-mobile.webp",
+      };
+    }
+
     const isRamDarbar =
       slide?.title?.toLowerCase()?.includes("ram darbar") ||
       slide?.subtitle?.toLowerCase()?.includes("ram darbar") ||
@@ -133,7 +140,7 @@ export default function HeroCarousel() {
       <section className="relative h-[58vh] min-h-[550px] max-h-[780px] w-full bg-black">
         {slides.map((slide, idx) => {
           const { desktop: desktopImage, mobile: mobileImage } =
-            getSlideImages(slide);
+            getSlideImages(slide, idx);
 
           const hasOnlyButton =
             !slide?.title &&
