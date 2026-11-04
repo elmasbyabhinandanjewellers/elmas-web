@@ -47,7 +47,7 @@ export default function FeaturedCollections() {
           {visibleCollections.map((collection) => (
             <Link
               key={collection._id}
-              href={`/shop?collection=${getSlug(collection)}`}
+              href={`/shop?collection=${encodeURIComponent(getSlug(collection))}`}
               className="group relative overflow-hidden h-[320px]"
             >
               <img

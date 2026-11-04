@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { X } from "lucide-react";
 
 import { useProducts } from "@/context/ProductsContext";
@@ -15,8 +15,29 @@ import ProductGrid from "@/components/pages/Shop/ProductGrid";
 
 const MAX_PRICE = 2000000;
 
+const parseFiltersFromSearchParams = (sp) => {
+  const category = sp?.get("category") || "";
+  const collection = sp?.get("collection") || "";
+  const search = sp?.get("search") || "";
+
+  const minPriceParam = sp?.get("minPrice");
+  const maxPriceParam = sp?.get("maxPrice");
+  const limitParam = sp?.get("limit");
+
+  return {
+    category,
+    collection,
+    search,
+    minPrice: minPriceParam ? Number(minPriceParam) : 0,
+    maxPrice: maxPriceParam ? Number(maxPriceParam) : MAX_PRICE,
+    limit: limitParam ? Number(limitParam) : 100,
+  };
+};
+
 function ShopPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { products, productLoading, fetchProducts } = useProducts();
   const { categories } = useCategories();
@@ -25,45 +46,21 @@ function ShopPageContent() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sort, setSort] = useState("newest");
 
-  const [filters, setFilters] = useState({
-    category: "",
-    collection: "",
-    search: "",
-    minPrice: 0,
-    maxPrice: MAX_PRICE,
-    limit: 100,
-  });
+  const [filters, setFilters] = useState(() =>
+    parseFiltersFromSearchParams(searchParams)
+  );
 
-  const [appliedFilters, setAppliedFilters] = useState({
-    category: "",
-    collection: "",
-    search: "",
-    minPrice: 0,
-    maxPrice: MAX_PRICE,
-    limit: 100,
-  });
+  const [appliedFilters, setAppliedFilters] = useState(() =>
+    parseFiltersFromSearchParams(searchParams)
+  );
+
+  const searchParamsString = searchParams.toString();
 
   useEffect(() => {
-    const category = searchParams.get("category") || "";
-    const collection = searchParams.get("collection") || "";
-    const search = searchParams.get("search") || "";
-
-    const minPriceParam = searchParams.get("minPrice");
-    const maxPriceParam = searchParams.get("maxPrice");
-    const limitParam = searchParams.get("limit");
-
-    const nextFilters = {
-      category,
-      collection,
-      search,
-      minPrice: minPriceParam ? Number(minPriceParam) : 0,
-      maxPrice: maxPriceParam ? Number(maxPriceParam) : MAX_PRICE,
-      limit: limitParam ? Number(limitParam) : 100,
-    };
-
+    const nextFilters = parseFiltersFromSearchParams(searchParams);
     setFilters(nextFilters);
     setAppliedFilters(nextFilters);
-  }, [searchParams]);
+  }, [searchParamsString]);
 
   useEffect(() => {
     const params = {
@@ -94,6 +91,15 @@ function ShopPageContent() {
     setFilters(updatedFilters);
     setAppliedFilters(updatedFilters);
     setSidebarOpen(false);
+
+    const sp = new URLSearchParams();
+    if (updatedFilters.category) sp.set("category", updatedFilters.category);
+    if (updatedFilters.collection) sp.set("collection", updatedFilters.collection);
+    if (updatedFilters.search) sp.set("search", updatedFilters.search);
+    if (updatedFilters.minPrice > 0) sp.set("minPrice", String(updatedFilters.minPrice));
+    if (updatedFilters.maxPrice < MAX_PRICE) sp.set("maxPrice", String(updatedFilters.maxPrice));
+    const qs = sp.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
   const clearFilters = () => {
@@ -109,6 +115,7 @@ function ShopPageContent() {
     setFilters(reset);
     setAppliedFilters(reset);
     setSort("newest");
+    router.replace(pathname, { scroll: false });
   };
 
   const activeFilterCount = useMemo(() => {

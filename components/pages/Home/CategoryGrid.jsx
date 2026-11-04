@@ -42,7 +42,7 @@ export default function CategoryGrid() {
           {visibleCategories.map((cat, i) => (
             <Link
               key={cat._id}
-              href={`/shop?category=${getSlug(cat)}`}
+              href={`/shop?category=${encodeURIComponent(getSlug(cat))}`}
               className="group relative overflow-hidden"
               style={{ aspectRatio: i === 0 ? "4/5" : "4/5" }}
             >

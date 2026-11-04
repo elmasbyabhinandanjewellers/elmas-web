@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { getAllProducts, getBestSellers } from "@/api/products/productApi";
 
 const ProductsContext = createContext(null);
@@ -12,24 +12,31 @@ export function ProductsProvider({ children }) {
   const [bestSellers, setBestSellers] = useState([]);
   const [bestSellersLoading, setBestSellersLoading] = useState(false);
   const [bestSellersError, setBestSellersError] = useState(null);
+  const latestFetchId = useRef(0);
 
   const fetchProducts = async (params = {}) => {
+    const fetchId = ++latestFetchId.current;
     try {
       setProductLoading(true);
       setProductError(null);
 
       const res = await getAllProducts(params);
+      if (fetchId !== latestFetchId.current) return;
+
       const finalData =
         res?.data?.products || res?.data || res?.products || res || [];
 
       setProducts(Array.isArray(finalData) ? finalData : []);
     } catch (error) {
+      if (fetchId !== latestFetchId.current) return;
       setProductError(
         error?.response?.data?.message || "Failed to fetch products",
       );
       setProducts([]);
     } finally {
-      setProductLoading(false);
+      if (fetchId === latestFetchId.current) {
+        setProductLoading(false);
+      }
     }
   };
 
