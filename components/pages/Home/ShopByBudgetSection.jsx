@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 const priceCards = [
   {
@@ -71,7 +72,7 @@ function BudgetCard({ item }) {
     <Link href={item.href} className="group block">
       <div className="relative aspect-square">
         <Image
-          src={item.image}
+          src={getOptimizedImageUrl(item.image, { width: 600 })}
           alt={item.title}
           fill
           className="object-contain transition-transform duration-500 group-hover:scale-105"

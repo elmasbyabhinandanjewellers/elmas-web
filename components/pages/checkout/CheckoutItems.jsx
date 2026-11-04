@@ -1,5 +1,7 @@
 "use client";
 
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
+
 const fmt = (p) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -23,7 +25,7 @@ export default function CheckoutItems({ items = [] }) {
             className="flex gap-4 pb-4 border-b border-cream-200"
           >
             <img
-              src={item.product?.images?.[0] || "/logo.png"}
+              src={getOptimizedImageUrl(item.product?.images?.[0] || item.product?.image, { width: 200 }) || "/logo.png"}
               alt={item.product?.name || "Product"}
               className="w-20 h-20 object-contain bg-white border border-cream-200"
             />

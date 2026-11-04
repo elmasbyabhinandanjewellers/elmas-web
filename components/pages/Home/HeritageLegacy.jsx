@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 export default function HeritageLegacy() {
   return (
@@ -9,7 +10,7 @@ export default function HeritageLegacy() {
           <div className="relative h-[480px]">
             <div className="absolute left-0 md:left-10 top-0 w-[65%] md:w-[50%] h-[78%] overflow-hidden border-4 border-white shadow-xl bg-cream-100">
               <img
-                src="https://res.cloudinary.com/jy0tpdto/image/upload/v1788412838/WhatsApp_Image_2026-09-02_at_18.02.28.jpg"
+                src={getOptimizedImageUrl("https://res.cloudinary.com/jy0tpdto/image/upload/v1788412838/WhatsApp_Image_2026-09-02_at_18.02.28.jpg", { width: 800 })}
                 alt="Heritage Atelier"
                 className="w-full h-full object-cover"
               />
@@ -17,7 +18,7 @@ export default function HeritageLegacy() {
 
             <div className="absolute right-0 bottom-0 w-[52%] h-[52%] overflow-hidden border-4 border-white shadow-2xl">
               <img
-                src="https://res.cloudinary.com/jy0tpdto/image/upload/v1788412837/WhatsApp_Image_2026-09-02_at_18.02.28_1.jpg"
+                src={getOptimizedImageUrl("https://res.cloudinary.com/jy0tpdto/image/upload/v1788412837/WhatsApp_Image_2026-09-02_at_18.02.28_1.jpg", { width: 800 })}
                 alt="Craft"
                 className="w-full h-full object-cover"
               />

@@ -25,6 +25,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import ProductCard from "@/components/ProductCard";
 import ImageMagnifier from "@/components/ImageMagnifier";
 import LuxuryLoader from "@/components/LuxuryLoader";
+import { getOptimizedImageUrl, getOptimizedVideoUrl } from "@/lib/cloudinary";
 
 const fmt = (p) =>
   new Intl.NumberFormat("en-IN", {
@@ -35,20 +36,22 @@ const fmt = (p) =>
 
 const getImageUrl = (image) => {
   if (!image) return "/logo.png";
-  if (typeof image === "string") return image;
-  if (image?.url) return image.url;
-  if (image?.secure_url) return image.secure_url;
-  if (image?.src) return image.src;
-  return "/logo.png";
+  let raw = "/logo.png";
+  if (typeof image === "string") raw = image;
+  else if (image?.url) raw = image.url;
+  else if (image?.secure_url) raw = image.secure_url;
+  else if (image?.src) raw = image.src;
+  return getOptimizedImageUrl(raw);
 };
 
 const getVideoUrl = (video) => {
   if (!video) return null;
-  if (typeof video === "string") return video;
-  if (video?.url) return video.url;
-  if (video?.secure_url) return video.secure_url;
-  if (video?.src) return video.src;
-  return null;
+  let raw = null;
+  if (typeof video === "string") raw = video;
+  else if (video?.url) raw = video.url;
+  else if (video?.secure_url) raw = video.secure_url;
+  else if (video?.src) raw = video.src;
+  return getOptimizedVideoUrl(raw);
 };
 
 const getProductImages = (product) => {
@@ -447,7 +450,7 @@ export default function ProductDetailClient({ slug }) {
                 >
                   {item.type === "image" ? (
                     <img
-                      src={item.src}
+                      src={getOptimizedImageUrl(item.src, { width: 200 })}
                       alt={`${product.name} view ${i + 1}`}
                       className="w-full h-full object-contain"
                     />

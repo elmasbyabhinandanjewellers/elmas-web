@@ -137,7 +137,7 @@ function InstagramCard({ item, index, ariaHidden = false }) {
   const [imageFailed, setImageFailed] = useState(false);
 
   const isVideo = item.mediaType === "VIDEO";
-  const displayImage = item.thumbnail || item.image;
+  const displayImage = getOptimizedImageUrl(item.thumbnail || item.image, { width: 500 });
 
   return (
     <a

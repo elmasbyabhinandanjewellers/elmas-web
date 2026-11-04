@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import bannersApi from "@/api/banners/bannersApi";
 import Image from "next/image";
 import Link from "next/link";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -139,8 +140,9 @@ export default function HeroCarousel() {
     <div className="w-full overflow-hidden">
       <section className="relative h-[58vh] min-h-[550px] max-h-[780px] w-full bg-black">
         {slides.map((slide, idx) => {
-          const { desktop: desktopImage, mobile: mobileImage } =
-            getSlideImages(slide, idx);
+          const rawImgs = getSlideImages(slide, idx);
+          const desktopImage = getOptimizedImageUrl(rawImgs.desktop);
+          const mobileImage = getOptimizedImageUrl(rawImgs.mobile, { width: 1080 });
 
           const isFirstSlide = idx === 0;
 

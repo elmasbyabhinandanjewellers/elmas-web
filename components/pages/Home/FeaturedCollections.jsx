@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { useCollections } from "@/context/CollectionsContext";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 const getSlug = (item) => item?.checkName || item?.slug || item?._id;
 
 const getCollectionImage = (collection) => {
   const productImage = collection?.products?.[0]?.images?.[0];
 
-  if (productImage) return productImage;
-  if (collection?.bannerImage) return collection.bannerImage;
-  if (collection?.image) return collection.image;
-
-  return "/logo.png";
+  const raw = productImage || collection?.bannerImage || collection?.image;
+  if (!raw) return "/logo.png";
+  return getOptimizedImageUrl(raw, { width: 600 });
 };
 
 export default function FeaturedCollections() {

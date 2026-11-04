@@ -1,3 +1,4 @@
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 export const getSlug = (item) => item?.checkName || item?.slug || item?._id;
 
 export const getItemImage = (item) => {
@@ -6,10 +7,8 @@ export const getItemImage = (item) => {
   if (Array.isArray(item.images)) {
     const first = item.images[0];
 
-    if (typeof first === "string") return first;
-    if (first?.url) return first.url;
-    if (first?.secure_url) return first.secure_url;
-    if (first?.src) return first.src;
+    const raw = typeof first === "string" ? first : (first?.url || first?.secure_url || first?.src);
+    if (raw) return getOptimizedImageUrl(raw, { width: 600 });
   }
 
   return null;

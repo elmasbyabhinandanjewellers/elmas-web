@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { useCategories } from "@/context/CategoriesContext";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 const getSlug = (item) => item?.checkName || item?.slug || item?._id;
 
 const getCategoryImage = (category) => {
   const productImage = category?.products?.[0]?.images?.[0];
 
-  if (productImage) return productImage;
-  if (category?.bannerImage) return category.bannerImage;
-  if (category?.image) return category.image;
-
-  return "/logo.png";
+  const raw = productImage || category?.bannerImage || category?.image;
+  if (!raw) return "/logo.png";
+  return getOptimizedImageUrl(raw, { width: 600 });
 };
 
 export default function CategoryGrid() {

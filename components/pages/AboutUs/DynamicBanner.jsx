@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import bannersApi from "@/api/banners/bannersApi";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 export default function DynamicHeroBanner({
   page,
@@ -28,10 +29,10 @@ export default function DynamicHeroBanner({
 
   const [imgErrors, setImgErrors] = useState({});
 
-  const getValidImageUrl = (url, fallback) => {
+  const getValidImageUrl = (url, fallback, options) => {
     if (!url || typeof url !== "string") return fallback;
     if (url.includes("dxsnvcwif")) return fallback;
-    return url;
+    return getOptimizedImageUrl(url, options);
   };
 
   const slides =
@@ -93,7 +94,7 @@ export default function DynamicHeroBanner({
         const rawMobileImage = slide?.mobileImage;
         const mobileImage = isMobileFailed
           ? null
-          : getValidImageUrl(rawMobileImage, null);
+          : getValidImageUrl(rawMobileImage, null, { width: 1080 });
 
         return (
           <div

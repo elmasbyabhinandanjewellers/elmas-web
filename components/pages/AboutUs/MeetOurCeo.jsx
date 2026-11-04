@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 export default function MeetOurCEO() {
   return (
@@ -42,7 +43,7 @@ export default function MeetOurCEO() {
               <div className="relative rounded-[2rem] border border-cream-300 p-3 shadow-2xl">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-[#DFD8D8]">
                   <Image
-                    src="https://res.cloudinary.com/jy0tpdto/image/upload/v1788413227/WhatsApp_Image_2026-09-03_at_10.54.54.jpg"
+                    src={getOptimizedImageUrl("https://res.cloudinary.com/jy0tpdto/image/upload/v1788413227/WhatsApp_Image_2026-09-03_at_10.54.54.jpg", { width: 800 })}
                     alt="CEO of Elmas by Abhinandan Jewellers"
                     fill
                     priority

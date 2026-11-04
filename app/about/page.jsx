@@ -8,6 +8,7 @@ import MeetOurCEO from "@/components/pages/AboutUs/MeetOurCeo";
 import EventsGallery from "@/components/pages/AboutUs/EventsGallery";
 import Image from "next/image";
 import DynamicHeroBanner from "@/components/pages/AboutUs/DynamicBanner";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 const collageImages = [
   "https://res.cloudinary.com/jy0tpdto/image/upload/v1788413027/WhatsApp_Image_2026-09-02_at_18.21.04.jpg",

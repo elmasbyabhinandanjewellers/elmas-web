@@ -6,6 +6,7 @@ import { Heart, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCustomer } from "@/context/CustomerContext";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 export default function ProductCard({ product }) {
   const [wishlisted, setWishlisted] = useState(false);
@@ -19,13 +20,14 @@ export default function ProductCard({ product }) {
   const router = useRouter();
 
   const images = useMemo(() => {
+    let raw = ["/logo.png"];
     if (Array.isArray(product?.images) && product.images.length > 0) {
-      return product.images.slice(0, 3);
+      raw = product.images.slice(0, 3);
+    } else if (product?.image) {
+      raw = [product.image];
     }
 
-    if (product?.image) return [product.image];
-
-    return ["/logo.png"];
+    return raw.map((img) => getOptimizedImageUrl(img, { width: 800 }));
   }, [product]);
 
   useEffect(() => {

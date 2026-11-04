@@ -1,5 +1,7 @@
 "use client";
 
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Minus, Plus, X, ShoppingBag } from "lucide-react";
@@ -181,7 +183,8 @@ export default function CartPage() {
                   const productSlug =
                     product?.checkName || product?.slug || productId;
 
-                  const productImage = product?.images?.[0] || "/logo.png";
+                  const rawImage = product?.images?.[0] || product?.image;
+  const productImage = rawImage ? getOptimizedImageUrl(rawImage, { width: 300 }) : "/logo.png";
 
                   return (
                     <div

@@ -1,5 +1,7 @@
 "use client";
 
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
+
 import { fmt } from "@/components/pages/orders/pdfHelpers";
 
 export default function OrderItems({ items }) {
@@ -17,7 +19,7 @@ export default function OrderItems({ items }) {
             <div className="w-20 h-20 bg-cream-100 border border-cream-200 flex-shrink-0 overflow-hidden">
               {item.image && (
                 <img
-                  src={item.image}
+                  src={getOptimizedImageUrl(item.image, { width: 200 })}
                   alt={item.productName}
                   className="w-full h-full object-contain"
                 />

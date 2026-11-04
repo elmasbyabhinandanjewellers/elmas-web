@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { getOptimizedImageUrl } from "@/lib/cloudinary";
 
 const eventImages = [
   "https://res.cloudinary.com/jy0tpdto/image/upload/v1788411258/_DSC4812.jpg",
@@ -116,7 +117,7 @@ export default function EventsGallery() {
                     }`}
                   >
                     <Image
-                      src={tile.previousImage}
+                      src={getOptimizedImageUrl(tile.previousImage, { width: 600 })}
                       alt={`Elmas event ${index + 1}`}
                       fill
                       sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
@@ -130,7 +131,7 @@ export default function EventsGallery() {
                     }`}
                   >
                     <Image
-                      src={tile.currentImage}
+                      src={getOptimizedImageUrl(tile.currentImage, { width: 600 })}
                       alt={`Elmas event ${index + 1}`}
                       fill
                       sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
